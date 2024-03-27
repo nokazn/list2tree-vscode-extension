@@ -1,0 +1,2 @@
+*.lock linguist-generated
+pnpm-lock.yaml linguist-generated
