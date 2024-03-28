@@ -1,7 +1,7 @@
 {
   "name": "list2tree-vscode-extension",
   "displayName": "list2tree",
-  "description": "",
+  "description": "Convert markdown list to tree-styled format",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.87.0"
@@ -14,18 +14,21 @@
   "contributes": {
     "commands": [
       {
-        "command": "list2tree.helloWorld",
-        "title": "Hello World"
+        "command": "list2tree.convert",
+        "category": "list2tree",
+        "title": "Convert to tree-styled format"
       }
     ]
   },
   "scripts": {
     "vscode:prepublish": "pnpm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
+    "_build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "_clean": "del dist",
+    "build": "pnpm run _clean && pnpm run _build --source-map --minify",
+    "build:watch": "pnpm run _clean && pnpm run build --source-map --watch",
+    "build-test": "tsc -p . --outDir out",
+    "build-test:watch": "pnpm run build-test --watch",
+    "package": "pnpm run _clean && pnpm run _build --minify",
     "check": "concurrently -c auto 'npm:check:*'",
     "check:lint": "biome lint **/*",
     "check:format": "treefmt --fail-on-change",
@@ -43,9 +46,12 @@
     "@vscode/test-cli": "^0.0.6",
     "@vscode/test-electron": "^2.3.9",
     "concurrently": "^8.2.2",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.3.3",
-    "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4"
+    "del-cli": "^5.1.0",
+    "esbuild": "^0.20.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.4"
   }
 }

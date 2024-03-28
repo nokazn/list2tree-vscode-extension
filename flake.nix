@@ -26,6 +26,7 @@
         packages = with pkgs; [
           nodejs
           nodePackages.pnpm
+          esbuild
           biome
           nixpkgs-fmt
           dprint
